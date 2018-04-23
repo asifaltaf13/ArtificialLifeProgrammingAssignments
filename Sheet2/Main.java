@@ -12,16 +12,18 @@ public class Main
 
     public static void main(String []args) throws IOException
     {
+        // values that are being taken are runtime
         radius = getRadiusFromUser();
         ruleOutputs = getRuleOutputsFromUser(radius);
-
-        // it can either be seed or random and should be taken at runtime
         char condition = getConditionFromUser();
 
+        // file creation for output
         PrintWriter writer = new PrintWriter("output.txt", "UTF-8");
         Random rand = new Random();
+        // creating 50 lines in output
         for (int j=0; j<50; j++)
         {
+            // each row on 84 cells
             for(int i = 0; i<84; i++)
             {
                 // initial filling
@@ -38,10 +40,10 @@ public class Main
                         writer.print(cell[i]);
                     }
                 }
-                // application the rule
+                // application of the rule
                 else
                 {
-                    // the first two cells have to stay 0 so we don't apply rule on second cell.
+                    // the first two and the last two cells have to stay 0 so we don't apply rule on them.
                     if(i < 2 || i >= 82 )
                     {
                         writer.print(0);
@@ -64,6 +66,7 @@ public class Main
 
     private static void performRule(int index, int radius)
     {
+        // The commented code was my implementation for testing for radius 1 ... later on i converted it to generic code
 //        if (radius ==1)
 //        {
 //            int left = previousCell[index-1];
@@ -76,14 +79,17 @@ public class Main
 //        else
         {
             String ruleIndexBinary = "";
+            // containers for one pair where rule is applied
             int[] cellContainers = new int[2*radius+1];
 
+            // finding out which rule is it ... creates the binary
             for(int i = radius*-1, j=0; i<=radius; i++, j++)
             {
                 cellContainers[j] = previousCell[index + i];
                 ruleIndexBinary = ruleIndexBinary + String.valueOf(cellContainers[j]);
             }
 
+            // using that binary to get a rule number in decimal and updating the specific cell
             int ruleIndex = Integer.parseInt(ruleIndexBinary, 2);
             cell[index] = ruleOutputs[ruleIndex];
         }
